@@ -62,6 +62,28 @@ const Withdrawals = () => {
     init();
   }, []);
 
+  const approvePayment = async (id: string) => {
+    const [err, res] = await Api.approveWithdrawalReq(id);
+    if (err) {
+      alert("Something went wrong!");
+    }
+    if (res) {
+      alert("Approved payment!");
+      get_withdrawals()
+    }
+  };
+
+  const declinePayment = async (id: string) => {
+    const [err, res] = await Api.declineWithdrawalReq(id);
+    if (err) {
+      alert("Something went wrong!");
+    }
+    if (res) {
+      alert("Approved payment!");
+      get_withdrawals()
+    }
+  };
+
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: "flex" }}>
@@ -100,7 +122,7 @@ const Withdrawals = () => {
                       <TableCell>Amount</TableCell>
                       <TableCell>Seller</TableCell>
                       <TableCell>Payment Address</TableCell>
-                      <TableCell>Paid by Admin</TableCell>
+                      <TableCell>Payment Status</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -125,27 +147,26 @@ const Withdrawals = () => {
                             />
                           </TableCell>
                           <TableCell>{row?.paymentAddress}</TableCell>
-                          <TableCell>{row?.paidByAdmin.toString()}</TableCell>
-                          
-                          {/* <TableCell>{row?.paidByAdmin.toString()}</TableCell>
-                          {row?.paidByAdmin.toString() === "true" ? (
-                            <></>
-                          ) : (
-                            <TableCell sx={{ cursor: "pointer" }}>
-                              <Button
-                                variant="contained"
-                                onClick={() =>
-                                  depositMoney(
-                                    row?.createdBy,
-                                    row?.amount,
-                                    row?._id
-                                  )
-                                }
-                              >
-                                Deposit Amount
-                              </Button>
-                            </TableCell>
-                          )} */}
+                          <TableCell>
+                            {row?.paymentStatus === "Pending" ? (
+                              <Box sx={{ display: "flex", gap: 2 }}>
+                                <Button
+                                  variant="contained"
+                                  onClick={() => approvePayment(row._id)}
+                                >
+                                  Approved payment
+                                </Button>
+                                <Button
+                                  variant="contained"
+                                  onClick={() => declinePayment(row._id)}
+                                >
+                                  Declined payment
+                                </Button>
+                              </Box>
+                            ) : (
+                              <>{row?.paymentStatus}</>
+                            )}
+                          </TableCell>
                         </TableRow>
                       ))}
                   </TableBody>

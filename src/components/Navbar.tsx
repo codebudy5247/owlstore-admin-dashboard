@@ -22,7 +22,7 @@ const Navbar = (props: any) => {
   return (
     <>
       <CssBaseline />
-      <AppBar position="absolute" open={open} sx={{backgroundColor:'#FFFFFF'}}>
+      <AppBar position="absolute" open={open} sx={{backgroundColor:'blue'}}>
         <Toolbar
           sx={{
             pr: "24px",
@@ -45,7 +45,7 @@ const Navbar = (props: any) => {
             variant="h5"
             color="inherit"
             noWrap
-            sx={{ flexGrow: 1,color:'black' }}
+            sx={{ flexGrow: 1,color:'white' }}
           >
             {props?.title}
           </Typography>

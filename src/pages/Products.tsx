@@ -15,6 +15,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import AddProductModel from "../components/AddProductModel";
+import AddBulkCard from "../components/AddBulkCard";
 const mdTheme = createTheme();
 
 const formatString = (_str: string) => {
@@ -32,6 +33,10 @@ const Products = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const [open1, setOpen1] = useState(false);
+  const handleOpen1 = () => setOpen1(true);
+  const handleClose1 = () => setOpen1(false);
 
   useEffect(() => {
     const init = async () => {
@@ -78,13 +83,20 @@ const Products = () => {
               mb: 4,
             }}
           >
-            <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 3 }}>
+            <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 3,gap:2 }}>
               <Button
                 variant="contained"
                 startIcon={<AddIcon />}
                 onClick={handleOpen}
               >
                 Add
+              </Button>
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={handleOpen1}
+              >
+                Add Bulk Card
               </Button>
             </Box>
             {loading ? (
@@ -104,11 +116,11 @@ const Products = () => {
                       <TableCell>SSN</TableCell>
                       <TableCell>DL</TableCell>
                       <TableCell>Level</TableCell>
-                      <TableCell>Class</TableCell>
+                      {/* <TableCell>Class</TableCell> */}
                       <TableCell>Price</TableCell>
                       <TableCell>BankName</TableCell>
                       <TableCell>Type</TableCell>
-                      <TableCell>Other Details</TableCell>
+                      {/* <TableCell>Other Details</TableCell> */}
                       <TableCell>Seller</TableCell>
                     </TableRow>
                   </TableHead>
@@ -139,11 +151,11 @@ const Products = () => {
                             {row?.drivingLicenceNumber?.slice(0, 6)}...
                           </TableCell>
                           <TableCell>{row?.level}</TableCell>
-                          <TableCell>{row?.class}</TableCell>
+                          {/* <TableCell>{row?.class}</TableCell> */}
                           <TableCell>{row?.price}</TableCell>
                           <TableCell>{row?.bankName}</TableCell>
                           <TableCell>{row?.type}</TableCell>
-                          <TableCell>{row?.otherDetails}</TableCell>
+                          {/* <TableCell>{row?.otherDetails}</TableCell> */}
                           <TableCell>
                             {row?.createdBy?.slice(0, 6)}...
                           </TableCell>
@@ -160,6 +172,7 @@ const Products = () => {
             )}
           </Container>
           <AddProductModel open={open} handleClose={handleClose} />
+          <AddBulkCard open={open1} handleClose={handleClose1} />
         </Box>
       </Box>
     </ThemeProvider>

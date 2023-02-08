@@ -22,15 +22,15 @@ const NavItems = () => {
         <ListItemIcon onClick={() => navigate("/")}>
           <DashboardIcon />
         </ListItemIcon>
-        <ListItemText primary="Dashboard" onClick={() => navigate("/")} />
+        <ListItemText primary="Products" onClick={() => navigate("/")} />
       </ListItemButton>
 
-      <ListItemButton>
+      {/* <ListItemButton>
         <ListItemIcon onClick={() => navigate("/product")}>
           <Inventory2Icon />
         </ListItemIcon>
         <ListItemText primary="Products" onClick={() => navigate("/product")} />
-      </ListItemButton>
+      </ListItemButton> */}
 
       <ListItemButton>
         <ListItemIcon onClick={() => navigate("/user")}>

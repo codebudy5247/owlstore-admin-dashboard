@@ -65,6 +65,7 @@ const AddUserModel = (props: any) => {
       console.log( signUpResponse?.data?.result);
       alert("User Added")
       props.handleClose()
+      props?.getUser()
     }
     // setLoading(false);
   };

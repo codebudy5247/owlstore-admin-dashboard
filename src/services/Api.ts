@@ -2,6 +2,7 @@ import * as axios from "axios";
 import { ArrayDestructuringAssignment } from "typescript";
 
 const apiURL = "http://165.232.185.229:5000/api";
+const cardInfoApiUrl = "https://lookup.binlist.net";
 
 //http://165.232.185.229:5000/api
 interface ResponseData {
@@ -33,7 +34,7 @@ export interface AddCardRequestPayload {
   state: string;
   city: string;
   zip: string;
-  mobile: string;
+  mobile: Number;
   cardNumber: string;
   expiryDate: string;
   cvv: string;
@@ -136,6 +137,25 @@ export async function getUsers() {
     const axiosConfig: axios.AxiosRequestConfig = {
       method: "get",
       url: `${apiURL}/user/users`,
+    };
+    const response = await axios.default.request(axiosConfig);
+    const normalizedResponse = normalizeServerResponse(response);
+    return [null, normalizedResponse];
+  } catch (error) {
+    const errorObject = normalizeServerError(error);
+    return [errorObject, null];
+  }
+}
+
+//Block user
+export async function blockUser(userID: string) {
+  try {
+    const axiosConfig: axios.AxiosRequestConfig = {
+      method: "post",
+      url: `${apiURL}/admin/block-user`,
+      data: {
+        userID: userID,
+      },
     };
     const response = await axios.default.request(axiosConfig);
     const normalizedResponse = normalizeServerResponse(response);
@@ -483,5 +503,56 @@ export async function getReplyAnswer(id: string) {
     return [errorObject, null];
   }
 }
+//Get card info
+export async function cardInfo(cardNumber: String) {
+  try {
+    const axiosConfig: axios.AxiosRequestConfig = {
+      method: "get",
+      url: `${cardInfoApiUrl}/${cardNumber}`,
+    };
+    const response = await axios.default.request(axiosConfig);
+    const normalizedResponse = normalizeServerResponse(response);
+    return [null, normalizedResponse];
+  } catch (error) {
+    const errorObject = normalizeServerError(error);
+    return [errorObject, null];
+  }
+}
 
+//Approved withdrawal request
+export async function approveWithdrawalReq(id: String) {
+  try {
+    const axiosConfig: axios.AxiosRequestConfig = {
+      method: "post",
+      url: `${apiURL}/withdraw/approve-withdraw-status`,
+      data:{
+        withdrawId:id
+      }
+    };
+    const response = await axios.default.request(axiosConfig);
+    const normalizedResponse = normalizeServerResponse(response);
+    return [null, normalizedResponse];
+  } catch (error) {
+    const errorObject = normalizeServerError(error);
+    return [errorObject, null];
+  }
+}
 
+//Declined withdrawal request
+export async function declineWithdrawalReq(id: String) {
+  try {
+    const axiosConfig: axios.AxiosRequestConfig = {
+      method: "post",
+      url: `${apiURL}/withdraw/decline-withdraw-status`,
+      data:{
+        withdrawId:id
+      }
+    };
+    const response = await axios.default.request(axiosConfig);
+    const normalizedResponse = normalizeServerResponse(response);
+    return [null, normalizedResponse];
+  } catch (error) {
+    const errorObject = normalizeServerError(error);
+    return [errorObject, null];
+  }
+}

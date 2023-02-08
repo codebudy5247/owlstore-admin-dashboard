@@ -35,34 +35,42 @@ const Users = () => {
     );
   };
 
-
   const deleteUser = async (userId: any) => {
     const [error, response] = await Api.deleteUser(userId);
     if (error) {
     }
     if (response) {
-      alert("Deleted")
-      getUser()
+      alert("Deleted");
+      getUser();
     }
   };
 
-  const getUser = async() =>{
+  const getUser = async () => {
     setLoading(true);
-      const [err, res] = await Api.getUsers();
-      if (res) {
-        setUsers(res?.data?.users);
-      }
-      setLoading(false);
-  }
-
+    const [err, res] = await Api.getUsers();
+    if (res) {
+      setUsers(res?.data?.users);
+    }
+    setLoading(false);
+  };
 
   useEffect(() => {
     const init = async () => {
-     await getUser()
+      await getUser();
     };
     init();
   }, []);
 
+  const blockUser = async (userId: string) => {
+    const [err,res] = await Api.blockUser(userId)
+    if(err){
+      alert("Something went wrong!")
+    }
+    if(res){
+      alert("User blocked")
+      getUser();
+    }
+  };
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -88,7 +96,7 @@ const Users = () => {
               mb: 4,
             }}
           >
-             <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 3 }}>
+            <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 3 }}>
               <Button
                 variant="contained"
                 startIcon={<AddIcon />}
@@ -112,7 +120,6 @@ const Users = () => {
                       <TableCell>Email</TableCell>
                       <TableCell>Role</TableCell>
                       <TableCell>Password</TableCell>
-                     
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -124,11 +131,17 @@ const Users = () => {
                             "&:last-child td, &:last-child th": { border: 0 },
                           }}
                         >
-                          <TableCell>{moment(row?.createdAt).format('DD-MM-YYYY,h:mm a')}</TableCell>
+                          <TableCell>
+                            {moment(row?.createdAt).format("DD-MM-YYYY,h:mm a")}
+                          </TableCell>
                           <TableCell>{formatString(row?._id)}</TableCell>
                           <TableCell>{row?.username}</TableCell>
                           <TableCell>{row?.email_id}</TableCell>
-                          <TableCell>{row?.role}</TableCell>
+                          <TableCell>
+                            {row?.role === "ROLE_SELLER" ? "SELLER" : null}
+                            {row?.role === "ROLE_USER" ? "CUSTOMER" : null}
+                            {row?.role === "ROLE_ADMIN" ? "ADMIN" : null}
+                          </TableCell>
                           <TableCell>{formatString(row?.password)}</TableCell>
                           {/* <TableCell sx={{ cursor: "pointer" }}>
                             <Button variant="contained">
@@ -136,9 +149,24 @@ const Users = () => {
                             </Button>
                           </TableCell> */}
                           <TableCell sx={{ cursor: "pointer" }}>
-                            <Button variant="contained" onClick={() => deleteUser(row?._id)}>
+                            <Button
+                              variant="contained"
+                              onClick={() => deleteUser(row?._id)}
+                            >
                               <DeleteIcon />
                             </Button>
+                          </TableCell>
+                          <TableCell sx={{ cursor: "pointer" }}>
+                            {row?.accountStatus === "BLOCKED" ? (
+                              <>BLOCKED</>
+                            ) : (
+                              <Button
+                                variant="contained"
+                                onClick={() => blockUser(row?._id)}
+                              >
+                                Block
+                              </Button>
+                            )}
                           </TableCell>
                         </TableRow>
                       ))}
@@ -147,7 +175,7 @@ const Users = () => {
               </TableContainer>
             )}
           </Container>
-          <AddUserModel open={open} handleClose={handleClose} />
+          <AddUserModel open={open} handleClose={handleClose} getUser={getUser} />
         </Box>
       </Box>
     </ThemeProvider>

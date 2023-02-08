@@ -57,7 +57,12 @@ const AddProductModel = (props: any) => {
   const [otherDetails, setOtherDetails] = useState("");
   const [price, setPrice] = useState("");
   const [bankName, setBankName] = useState("");
-  const onChangeCCNumber = (e: any) => {
+
+  const [cardInfo, setCardInfo] = useState<any>();
+
+  console.log(cardInfo?.country?.name, "Card Info___________");
+
+  const onChangeCCNumber = async (e: any) => {
     setCcNumber(e.target.value);
   };
   const onChangeExpiryDate = (e: any) => {
@@ -76,9 +81,6 @@ const AddProductModel = (props: any) => {
   const onChangeZip = (e: any) => {
     setZip(e.target.value);
   };
-  const onChangeCountry: any = (e: any, values: any) => {
-    setCountry(values.code);
-  };
   const onChangeState: any = (e: any, values: any) => {
     setState(values.code);
   };
@@ -91,45 +93,53 @@ const AddProductModel = (props: any) => {
   const onChangeSsn = (e: any) => {
     setSsn(e.target.value);
   };
-  const onChangeClass: any = (e: any, values: any) => {
-    setClassOption(values.value);
-  };
-  const onChangeLabel: any = (e: any, values: any) => {
-    setLabel(values.value);
-  };
   const onChangeOtherDetails = (e: any) => {
     setOtherDetails(e.target.value);
   };
   const onChangePrice = (e: any) => {
     setPrice(e.target.value);
   };
-  const onChangeBankName = (e: any) => {
-    setBankName(e.target.value);
-  };
+
+  useEffect(() => {
+    const getCardInfo = async () => {
+      let cardNumber = ccNumber.slice(0, 6);
+      const [err, res] = await Api.cardInfo(cardNumber);
+      if (res) {
+        setCardInfo(res?.data);
+      }
+    };
+    getCardInfo();
+  }, [ccNumber]);
 
   const OnSubmit = async () => {
-    const payloadObj = {
-      street: street,
-      country: country,
-      state: state,
-      city: city,
-      zip: zip,
-      mobile: mobile,
-      cardNumber: ccNumber,
-      expiryDate: expiryDate,
-      cvv: CVV,
-      socialSecurityNumber: ssn,
-      drivingLicenceNumber: dl,
-      level: label,
-      class: class_option,
-      price: price,
-      bankName: bankName,
-      type: "visa",
-    };
+    if (cardInfo) {
+      const payloadObj = {
+        street: street,
+        country: cardInfo.country.name,
+        state: state,
+        city: city,
+        zip: zip,
+        mobile: Number(cardInfo.bank.phone),
+        cardNumber: ccNumber,
+        expiryDate: expiryDate,
+        cvv: CVV,
+        socialSecurityNumber: ssn,
+        drivingLicenceNumber: dl,
+        level: cardInfo.scheme,
+        price: price,
+        bankName: cardInfo.bank.name,
+        type: cardInfo.type,
+      };
 
-    const [err, res] = await Api.createCard(payloadObj);
-    if (res) {
-      console.log({ res });
+      const [err, res] = await Api.createCard(payloadObj);
+      if (err) {
+        alert("Something went wrong!")
+       
+      }
+      if (res) {
+        alert("Created!")
+       
+      }
     }
   };
 
@@ -163,14 +173,24 @@ const AddProductModel = (props: any) => {
             onChange={onChangeCCNumber}
           />
           {/* Expiry Date */}
-          <TextField
-            type="date"
+          <label>Expiry Date</label>
+          {/* <input
+            width={200}
+            type="month"
+            id="start"
+            name="start"
+            min="2022-01"
+            defaultValue="2022-01"
+            onChange={onChangeExpiryDate}
+          ></input> */}
+           <TextField
+            type="month"
+            required={true}
             fullWidth
-            id="base"
-            label="Expiry Date"
-            variant="outlined"
-            defaultValue="2017-05-24"
-            InputLabelProps={{ shrink: true, required: true }}
+            id="start"
+            name="start"
+            // min="2022-01"
+            defaultValue="2022-01"
             onChange={onChangeExpiryDate}
           />
         </Stack>
@@ -200,9 +220,10 @@ const AddProductModel = (props: any) => {
             required={true}
             fullWidth
             id="mobile"
-            label="Phone number"
+            // label="Phone number"
             variant="outlined"
-            onChange={onChangeMobile}
+            value={cardInfo?.bank?.phone}
+            // onChange={onChangeMobile}
           />
         </Stack>
         <Stack direction={{ xs: "column", sm: "row" }} spacing={5}>
@@ -216,7 +237,16 @@ const AddProductModel = (props: any) => {
             onChange={onChangeZip}
           />
           {/* Country */}
-          <Autocomplete
+          <TextField
+            required={true}
+            fullWidth
+            id="mobile"
+            // label="Phone number"
+            variant="outlined"
+            value={cardInfo?.country?.name}
+            // onChange={onChangeMobile}
+          />
+          {/* <Autocomplete
             fullWidth
             id="country-select-demo"
             // sx={{ width: 400 }}
@@ -250,7 +280,7 @@ const AddProductModel = (props: any) => {
                 }}
               />
             )}
-          />
+          /> */}
         </Stack>
         <Stack direction={{ xs: "column", sm: "row" }} spacing={5}>
           {/* States */}
@@ -292,81 +322,23 @@ const AddProductModel = (props: any) => {
           />
         </Stack>
         <Stack direction={{ xs: "column", sm: "row" }} spacing={5}>
-          {/* DL */}
+          {/* Type */}
           <TextField
             required={true}
             fullWidth
-            id="zip"
-            label="Driving Licence Number"
+            id="od"
+            // label="Type"
             variant="outlined"
-            onChange={onChangeDl}
-          />
-          {/* SSN */}
-          <TextField
-            required={true}
-            fullWidth
-            id="ssn"
-            label="Social Security Number"
-            variant="outlined"
-            onChange={onChangeSsn}
-          />
-        </Stack>
-        <Stack direction={{ xs: "column", sm: "row" }} spacing={5}>
-          {/* Class */}
-          <Autocomplete
-            fullWidth
-            id="country-select-demo"
-            options={classOption}
-            onChange={onChangeClass}
-            autoHighlight
-            getOptionLabel={(option) => option.label}
-            renderOption={(props, option) => (
-              <Box
-                component="li"
-                sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
-                {...props}
-              >
-                {option.label}
-              </Box>
-            )}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Class"
-                inputProps={{
-                  ...params.inputProps,
-                  autoComplete: "new-password", // disable autocomplete and autofill
-                }}
-              />
-            )}
+            value={cardInfo?.type}
           />
           {/* Label */}
-          <Autocomplete
+          <TextField
+            required={true}
             fullWidth
-            id="country-select-demo"
-            options={levelOption}
-            onChange={onChangeLabel}
-            autoHighlight
-            getOptionLabel={(option) => option.label}
-            renderOption={(props, option) => (
-              <Box
-                component="li"
-                sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
-                {...props}
-              >
-                {option.label}
-              </Box>
-            )}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Label"
-                inputProps={{
-                  ...params.inputProps,
-                  autoComplete: "new-password", // disable autocomplete and autofill
-                }}
-              />
-            )}
+            id="od"
+            // label="Lavel"
+            variant="outlined"
+            value={cardInfo?.scheme}
           />
         </Stack>
         <Stack direction={{ xs: "column", sm: "row" }} spacing={5}>
@@ -389,13 +361,33 @@ const AddProductModel = (props: any) => {
           />
         </Stack>
         <Stack direction={{ xs: "column", sm: "row" }} spacing={5}>
+          {/* DL */}
+          <TextField
+            // required={true}
+            fullWidth
+            id="zip"
+            label="Driving Licence Number"
+            variant="outlined"
+            onChange={onChangeDl}
+          />
+          {/* SSN */}
+          <TextField
+            // required={true}
+            fullWidth
+            id="ssn"
+            label="Social Security Number"
+            variant="outlined"
+            onChange={onChangeSsn}
+          />
+        </Stack>
+        <Stack direction={{ xs: "column", sm: "row" }} spacing={5}>
           <TextField
             required={true}
             fullWidth
-            id="bankName"
-            label="Bank Name"
+            id="od"
+            // label="Bank"
             variant="outlined"
-            onChange={onChangeBankName}
+            value={cardInfo?.bank?.name}
           />
         </Stack>
       </Stack>

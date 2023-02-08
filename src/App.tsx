@@ -20,8 +20,8 @@ function App() {
         <Fragment>
           <Routes>
             <Route path="/" element={<AuthGuard />}>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/product" element={<Products />} />
+              <Route path="/" element={<Products />} />
+              {/* <Route path="/product" element={<Products />} /> */}
               <Route path="/user" element={<Users />} />
               <Route path="/order" element={<Orders />} />
               <Route path="/billing" element={<Billings />} />
