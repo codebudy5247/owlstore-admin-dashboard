@@ -166,13 +166,13 @@ export async function blockUser(userID: string) {
   }
 }
 
-//cerate card
+//create card
 export async function createCard(payload: AddCardRequestPayload) {
   try {
     let token: any = localStorage.getItem("authToken");
     const axiosConfig: axios.AxiosRequestConfig = {
       method: "post",
-      url: `${apiURL}/card`,
+      url: `${apiURL}/admin/create-card`,
       data: {
         cardNumber: payload.cardNumber,
         expiryDate: payload.expiryDate,

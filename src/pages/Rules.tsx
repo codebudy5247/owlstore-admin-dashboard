@@ -35,6 +35,17 @@ const Rules = () => {
     init();
   }, []);
 
+  const deleteRules = async (rulesId: any) => {
+    const [error, response] = await Api.deleteRules(rulesId);
+    if (error) {
+      alert(error?.data);
+    }
+    if (response) {
+      alert("Deleted");
+      get_rules();
+    }
+  };
+
   return (
     <ThemeProvider theme={mdTheme}>
       <Box sx={{ display: "flex" }}>
@@ -102,7 +113,7 @@ const Rules = () => {
                             </Typography>
 
                             <DeleteIcon
-                              //   onClick={() => deleteNews(o?._id)}
+                                onClick={() => deleteRules(o?._id)}
                               sx={{ cursor: "pointer" }}
                             />
                           </Box>

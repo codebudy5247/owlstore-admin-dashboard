@@ -74,13 +74,13 @@ export default function Orders() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {rows?.map((row) => (
             <TableRow key={row.id}>
-              <TableCell>{row.date}</TableCell>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.shipTo}</TableCell>
-              <TableCell>{row.paymentMethod}</TableCell>
-              <TableCell align="right">{`$${row.amount}`}</TableCell>
+              <TableCell>{row?.date}</TableCell>
+              <TableCell>{row?.name}</TableCell>
+              <TableCell>{row?.shipTo}</TableCell>
+              <TableCell>{row?.paymentMethod}</TableCell>
+              <TableCell align="right">{`$${row?.amount}`}</TableCell>
             </TableRow>
           ))}
         </TableBody>

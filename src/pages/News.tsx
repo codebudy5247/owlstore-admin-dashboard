@@ -8,7 +8,6 @@ import AddIcon from "@mui/icons-material/Add";
 import * as Api from "../services/Api";
 import CircularProgress from "@mui/material/CircularProgress";
 import moment from "moment";
-import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CreateNewsModel from "../components/CreateNewsModel";
 

@@ -13,11 +13,19 @@ import AppBar from "../components/AppBar";
 import Drawer from "../components/Drawer";
 import NavItems from "../components/NavItems";
 import { Avatar } from "@mui/material";
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useNavigate } from "react-router-dom";
 
 const Navbar = (props: any) => {
+  const navigate = useNavigate();
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
+  };
+
+  const logout = () => {
+    localStorage.removeItem("authToken");
+    navigate("/login");
   };
   return (
     <>
@@ -60,6 +68,9 @@ const Navbar = (props: any) => {
               src="https://mui.com/static/images/avatar/1.jpg"
             />
           </IconButton>
+          {/* <IconButton color="inherit" sx={{ ml: 1 }} onClick={logout}>
+            <LogoutIcon />
+          </IconButton> */}
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>

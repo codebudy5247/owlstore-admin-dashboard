@@ -123,7 +123,7 @@ const Orders = () => {
                       <TableCell>Cutomer</TableCell>
                       <TableCell>Seller</TableCell>
                       <TableCell>Total Price</TableCell>
-                      <TableCell>Payment Status</TableCell>
+                      {/* <TableCell>Payment Status</TableCell> */}
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -149,7 +149,7 @@ const Orders = () => {
                             <UserDetails merchant={row} userID={row?.seller} />
                           </TableCell>
                           <TableCell>฿ {row?.totalPrice}</TableCell>
-                          <TableCell sx={{}}>
+                          {/* <TableCell sx={{}}>
                             <Box sx={{ display: "flex" }}>
                               {row?.isPaid.toString() === "true" ? (
                                 <>
@@ -185,7 +185,7 @@ const Orders = () => {
                                 </>
                               )}
                             </Box>
-                          </TableCell>
+                          </TableCell> */}
                           {/* <TableCell sx={{ cursor: "pointer" }}>
                             <Button variant="contained">
                               <EditIcon />

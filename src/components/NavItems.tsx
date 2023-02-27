@@ -7,14 +7,20 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import PeopleIcon from "@mui/icons-material/People";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
 import { useNavigate } from "react-router-dom";
-import NewspaperIcon from '@mui/icons-material/Newspaper';
-import GavelIcon from '@mui/icons-material/Gavel';
-import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
-import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
-import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import NewspaperIcon from "@mui/icons-material/Newspaper";
+import GavelIcon from "@mui/icons-material/Gavel";
+import ConfirmationNumberIcon from "@mui/icons-material/ConfirmationNumber";
+import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 const NavItems = () => {
   const navigate = useNavigate();
+
+  const logout = () => {
+    localStorage.removeItem("authToken");
+    navigate("/login");
+  };
 
   return (
     <React.Fragment>
@@ -48,14 +54,14 @@ const NavItems = () => {
 
       <ListItemButton>
         <ListItemIcon onClick={() => navigate("//billing")}>
-        <AttachMoneyIcon />
+          <AttachMoneyIcon />
         </ListItemIcon>
         <ListItemText primary="Billings" onClick={() => navigate("/billing")} />
       </ListItemButton>
 
       <ListItemButton>
         <ListItemIcon onClick={() => navigate("/seller-withdraw")}>
-        <KeyboardDoubleArrowRightIcon />
+          <KeyboardDoubleArrowRightIcon />
         </ListItemIcon>
         <ListItemText
           primary="Withdrawal Requests"
@@ -65,23 +71,30 @@ const NavItems = () => {
 
       <ListItemButton>
         <ListItemIcon onClick={() => navigate("/news")}>
-        <NewspaperIcon />
+          <NewspaperIcon />
         </ListItemIcon>
         <ListItemText primary="News" onClick={() => navigate("/news")} />
       </ListItemButton>
 
       <ListItemButton>
         <ListItemIcon onClick={() => navigate("/rules")}>
-        <GavelIcon />
+          <GavelIcon />
         </ListItemIcon>
         <ListItemText primary="Rules" onClick={() => navigate("/rules")} />
       </ListItemButton>
 
       <ListItemButton>
         <ListItemIcon onClick={() => navigate("/tickets")}>
-        <ConfirmationNumberIcon />
+          <ConfirmationNumberIcon />
         </ListItemIcon>
         <ListItemText primary="Tickets" onClick={() => navigate("/tickets")} />
+      </ListItemButton>
+
+      <ListItemButton sx={{ color: "red" }} onClick={logout}>
+        <ListItemIcon sx={{ color: "red" }}>
+          <LogoutIcon />
+        </ListItemIcon>
+        <ListItemText primary="Logout" onClick={logout} />
       </ListItemButton>
     </React.Fragment>
   );
