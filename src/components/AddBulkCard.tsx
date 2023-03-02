@@ -10,7 +10,6 @@ import FileDownloadIcon from "@mui/icons-material/FileDownload";
 import * as Api from "../services/Api";
 import {
     Stack,
-    TextField,
     Typography,
     Box,
     Container,
@@ -65,8 +64,30 @@ const AddBulkCard = (props:any) => {
     inputFileRef.current?.click();
   };
 
+  function ExcelDateToJSDate(serial: any) {
+    var utc_days = Math.floor(serial - 25569);
+    var utc_value = utc_days * 86400;
+    var date_info = new Date(utc_value * 1000);
+    var fractional_day = serial - Math.floor(serial) + 0.0000001;
+    var total_seconds = Math.floor(86400 * fractional_day);
+    var seconds = total_seconds % 60;
+    total_seconds -= seconds;
+    var hours = Math.floor(total_seconds / (60 * 60));
+    var minutes = Math.floor(total_seconds / 60) % 60;
+
+    return new Date(
+      date_info.getFullYear(),
+      date_info.getMonth(),
+      date_info.getDate(),
+      hours,
+      minutes,
+      seconds
+    );
+  }
+
   const handleSubmit = async () => {
     for (const item of xlsxData) {
+      let ExpiryDate = ExcelDateToJSDate(item.expiryDate);
       const [err, res] = await Api.cardInfo(
         item.cardNumber.toString().slice(0, 6)
       );
@@ -79,7 +100,7 @@ const AddBulkCard = (props:any) => {
           zip: item.zip,
           mobile: Number(res.data.bank.phone),
           cardNumber: item.cardNumber,
-          expiryDate: item.expiryDate,
+          expiryDate: ExpiryDate,
           cvv: item.cvv,
           socialSecurityNumber: item.socialSecurityNumber,
           drivingLicenceNumber: item.drivingLicenceNumber,
@@ -91,7 +112,7 @@ const AddBulkCard = (props:any) => {
         // call add product api
         const [error, response] = await Api.createCard(payloadObj);
         if (error) {
-            alert("Something went wrong!")
+            alert(error?.data)
         }
        
       } else {

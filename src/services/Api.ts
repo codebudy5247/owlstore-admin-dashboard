@@ -4,7 +4,8 @@ import { ArrayDestructuringAssignment } from "typescript";
 const apiURL = "http://165.232.185.229:5000/api";
 const cardInfoApiUrl = "https://lookup.binlist.net";
 
-//http://165.232.185.229:5000/api
+//http://165.232.185.229:5000/api http://localhost:5000/api
+
 interface ResponseData {
   data: any;
   status: any;
@@ -21,7 +22,7 @@ function normalizeServerResponse(serverResponse: any) {
 
 function normalizeServerError(serverResponse: any) {
   let response: ResponseData = {
-    data: serverResponse.message,
+    data: serverResponse.response.data.message,
     status: serverResponse.status,
   };
 
@@ -36,7 +37,7 @@ export interface AddCardRequestPayload {
   zip: string;
   mobile: Number;
   cardNumber: string;
-  expiryDate: string;
+  expiryDate: any;
   cvv: string;
   socialSecurityNumber: string;
   drivingLicenceNumber: string;
@@ -205,7 +206,7 @@ export async function createCard(payload: AddCardRequestPayload) {
   }
 }
 
-//delete card
+//Delete Card
 export async function deleteCard(id: string) {
   try {
     let token: any = localStorage.getItem("authToken");
@@ -466,6 +467,25 @@ export async function getTickets() {
   }
 }
 
+//Delete Ticket
+export async function deleteTicket(id: string) {
+  try {
+    let token: any = localStorage.getItem("authToken");
+    const axiosConfig: axios.AxiosRequestConfig = {
+      method: "delete",
+      url: `${apiURL}/ticket/${id}`,
+      headers: { Authorization: "Bearer " + token },
+    };
+    const response = await axios.default.request(axiosConfig);
+    const normalizedResponse = normalizeServerResponse(response);
+    return [null, normalizedResponse];
+  } catch (error) {
+    const errorObject = normalizeServerError(error);
+    return [errorObject, null];
+  }
+}
+
+
 //Reply to tickets
 export async function createAnswer(ticketId: string, content: string) {
   try {
@@ -503,6 +523,28 @@ export async function getReplyAnswer(id: string) {
     return [errorObject, null];
   }
 }
+
+//Close ticket
+export async function closeTicket(id:string) {
+  try {
+    let token: any = localStorage.getItem("authToken");
+    const axiosConfig: axios.AxiosRequestConfig = {
+      method: "post",
+      url: `${apiURL}/ticket/close-ticket`,
+      headers: { Authorization: "Bearer " + token },
+      data:{
+        ticketID:id
+      }
+    };
+    const response = await axios.default.request(axiosConfig);
+    const normalizedResponse = normalizeServerResponse(response);
+    return [null, normalizedResponse];
+  } catch (error) {
+    const errorObject = normalizeServerError(error);
+    return [errorObject, null];
+  }
+}
+
 //Get card info
 export async function cardInfo(cardNumber: String) {
   try {

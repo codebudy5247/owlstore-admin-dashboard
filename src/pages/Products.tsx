@@ -53,6 +53,7 @@ const Products = () => {
   const deleteProduct = async (item: any) => {
     const [error, response] = await Api.deleteCard(item._id);
     if (error) {
+      alert(error?.data)
     }
     if (response) {
       alert("Deleted")

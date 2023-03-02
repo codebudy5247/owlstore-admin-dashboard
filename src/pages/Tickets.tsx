@@ -4,12 +4,16 @@ import Box from "@mui/material/Box";
 import Navbar from "../components/Navbar";
 import Toolbar from "@mui/material/Toolbar";
 import * as Api from "../services/Api";
-import { Card, Container, Typography } from "@mui/material";
+import { Button, Card, Container, Typography } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
 import moment from "moment";
 import SendIcon from "@mui/icons-material/Send";
 import ReplyModel from "../components/ReplyModel";
-
+import IconButton from "@mui/material/IconButton";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import DeleteIcon from "@mui/icons-material/Delete";
 const UserDetails = (props: any) => {
   const [user, setUser] = useState<any>();
   useEffect(() => {
@@ -68,12 +72,14 @@ const Reply = (props: any) => {
 const mdTheme = createTheme();
 
 const Tickets = () => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [loading, setLoading] = useState<any>(false);
   const [tickets, setTickets] = useState<any>();
   const [ticketId, setTicketID] = useState("");
 
   const [open, setOpen] = useState(false);
   const handleOpen = (ticketId: any) => {
+    setAnchorEl(null);
     setTicketID(ticketId);
     setOpen(true);
   };
@@ -92,6 +98,36 @@ const Tickets = () => {
     };
     init();
   }, []);
+
+  const openM = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleCloseM = () => {
+    setAnchorEl(null);
+  };
+
+  const closeTicketHandler = async (ticketId: string) => {
+    const [err, res] = await Api.closeTicket(ticketId);
+    if (err) {
+      alert(err?.data);
+    }
+    if (res) {
+      alert("Ticket closed!");
+      get_tickets();
+    }
+  };
+
+  const deleteTicketHandler = async (ticketId: string) => {
+    const [error, response] = await Api.deleteTicket(ticketId);
+    if (error) {
+      alert(error?.data);
+    }
+    if (response) {
+      alert("Deleted");
+      get_tickets();
+    }
+  };
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -149,11 +185,66 @@ const Tickets = () => {
                             >
                               {o?.title}
                             </Typography>
-
-                            <SendIcon
-                              onClick={() => handleOpen(o?._id)}
-                              sx={{ cursor: "pointer" }}
-                            />
+                            {o?.status === "CLOSED" ? (
+                              <>
+                                <Box sx={{ display: "flex", gap: 2 }}>
+                                  <Button variant="contained" disabled>
+                                    {o?.status}
+                                  </Button>
+                                  <Button
+                                    onClick={() => deleteTicketHandler(o?._id)}
+                                    variant="contained"
+                                    startIcon={<DeleteIcon />}
+                                  >
+                                    Delete
+                                  </Button>
+                                </Box>
+                              </>
+                            ) : (
+                              <>
+                                <IconButton
+                                  aria-label="more"
+                                  id="long-button"
+                                  aria-controls={
+                                    openM ? "long-menu" : undefined
+                                  }
+                                  aria-expanded={openM ? "true" : undefined}
+                                  aria-haspopup="true"
+                                  onClick={handleClick}
+                                >
+                                  <MoreVertIcon />
+                                </IconButton>
+                                <Menu
+                                  id="demo-positioned-menu"
+                                  aria-labelledby="demo-positioned-button"
+                                  anchorEl={anchorEl}
+                                  open={openM}
+                                  onClose={handleCloseM}
+                                  anchorOrigin={{
+                                    vertical: "top",
+                                    horizontal: "left",
+                                  }}
+                                  transformOrigin={{
+                                    vertical: "top",
+                                    horizontal: "left",
+                                  }}
+                                >
+                                  <MenuItem onClick={() => handleOpen(o?._id)}>
+                                    Reply
+                                  </MenuItem>
+                                  <MenuItem
+                                    onClick={() => closeTicketHandler(o._id)}
+                                  >
+                                    Close ticket
+                                  </MenuItem>
+                                  <MenuItem
+                                    onClick={() => deleteTicketHandler(o?._id)}
+                                  >
+                                    Delete
+                                  </MenuItem>
+                                </Menu>
+                              </>
+                            )}
                           </Box>
 
                           <Typography

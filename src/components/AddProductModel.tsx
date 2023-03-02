@@ -133,7 +133,7 @@ const AddProductModel = (props: any) => {
 
       const [err, res] = await Api.createCard(payloadObj);
       if (err) {
-        alert("Something went wrong!")
+        alert(err?.data)
        
       }
       if (res) {

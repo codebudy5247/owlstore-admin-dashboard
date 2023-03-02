@@ -119,7 +119,7 @@ const Orders = () => {
                     <TableRow>
                       <TableCell>Date</TableCell>
                       <TableCell>Order Id</TableCell>
-                      <TableCell>status</TableCell>
+                      <TableCell>Refund Status</TableCell>
                       <TableCell>Cutomer</TableCell>
                       <TableCell>Seller</TableCell>
                       <TableCell>Total Price</TableCell>
@@ -141,7 +141,7 @@ const Orders = () => {
                             {moment(row?.createdAt).format("DD-MM-YYYY,h:mm a")}
                           </TableCell>
                           <TableCell>{row?._id}</TableCell>
-                          <TableCell>{row?.status}</TableCell>
+                          <TableCell>{row?.refund_status}</TableCell>
                           <TableCell>
                             <UserDetails merchant={row} userID={row?.user} />
                           </TableCell>
@@ -203,11 +203,11 @@ const Orders = () => {
               </TableContainer>
             )}
           </Container>
-          <OrderDetailsModel
+          {/* <OrderDetailsModel
             open={open}
             handleClose={handleClose}
             orderDetail={orderDetail}
-          />
+          /> */}
           <UpdateOrderModel
           open={openUpdateModel}
           handleClose={handleCloseUpdateModel}
