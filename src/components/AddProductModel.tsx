@@ -5,7 +5,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { styled } from "@mui/material/styles";
 import Button, { ButtonProps } from "@mui/material/Button";
-import { Box, Stack, TextField, Typography,Autocomplete } from "@mui/material";
+import { Box, Stack, TextField, Typography, Autocomplete } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { Icon } from "@iconify/react";
 import { pink } from "@mui/material/colors";
@@ -17,26 +17,26 @@ import * as Api from "../services/Api";
 import moment from "moment";
 
 const classOption = [
-    {
-      value: "credit",
-      label: "Credit",
-    },
-    {
-      value: "debit",
-      label: "Debit",
-    },
-  ];
-  
-  const levelOption = [
-    {
-      value: "classic",
-      label: "Classic",
-    },
-    {
-      value: "platinum",
-      label: "Platinum",
-    },
-  ];
+  {
+    value: "credit",
+    label: "Credit",
+  },
+  {
+    value: "debit",
+    label: "Debit",
+  },
+];
+
+const levelOption = [
+  {
+    value: "classic",
+    label: "Classic",
+  },
+  {
+    value: "platinum",
+    label: "Platinum",
+  },
+];
 
 const AddProductModel = (props: any) => {
   const [fullWidth, setFullWidth] = useState(true);
@@ -133,12 +133,12 @@ const AddProductModel = (props: any) => {
 
       const [err, res] = await Api.createCard(payloadObj);
       if (err) {
-        alert(err?.data)
-       
+        alert(err?.data);
       }
       if (res) {
-        alert("Created!")
-       
+        alert("Created!");
+        props?.handleClose();
+        props?.getProducts();
       }
     }
   };
@@ -161,20 +161,20 @@ const AddProductModel = (props: any) => {
           </Box>
         </DialogTitle>
         <DialogContent>
-        <Stack spacing={2} sx={{ mt: 2 }}>
-        <Stack direction={{ xs: "column", sm: "row" }} spacing={5}>
-          {/* Card Number */}
-          <TextField
-            required={true}
-            fullWidth
-            id="base"
-            label="CC Number"
-            variant="outlined"
-            onChange={onChangeCCNumber}
-          />
-          {/* Expiry Date */}
-          <label>Expiry Date</label>
-          {/* <input
+          <Stack spacing={2} sx={{ mt: 2 }}>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={5}>
+              {/* Card Number */}
+              <TextField
+                required={true}
+                fullWidth
+                id="base"
+                label="CC Number"
+                variant="outlined"
+                onChange={onChangeCCNumber}
+              />
+              {/* Expiry Date */}
+              <label>Expiry Date</label>
+              {/* <input
             width={200}
             type="month"
             id="start"
@@ -183,70 +183,70 @@ const AddProductModel = (props: any) => {
             defaultValue="2022-01"
             onChange={onChangeExpiryDate}
           ></input> */}
-           <TextField
-            type="month"
-            required={true}
-            fullWidth
-            id="start"
-            name="start"
-            // min="2022-01"
-            defaultValue="2022-01"
-            onChange={onChangeExpiryDate}
-          />
-        </Stack>
-        <Stack direction={{ xs: "column", sm: "row" }} spacing={5}>
-          {/* CVV */}
-          <TextField
-            required={true}
-            fullWidth
-            id="base"
-            label="CVV"
-            variant="outlined"
-            onChange={onChangeCVV}
-          />
-        </Stack>
-        <Stack direction={{ xs: "column", sm: "row" }} spacing={5}>
-          {/* street */}
-          <TextField
-            required={true}
-            fullWidth
-            id="street"
-            label="Street"
-            variant="outlined"
-            onChange={onChangeStreet}
-          />
-          {/* Mobile */}
-          <TextField
-            required={true}
-            fullWidth
-            id="mobile"
-            // label="Phone number"
-            variant="outlined"
-            value={cardInfo?.bank?.phone}
-            // onChange={onChangeMobile}
-          />
-        </Stack>
-        <Stack direction={{ xs: "column", sm: "row" }} spacing={5}>
-          {/* Zip code */}
-          <TextField
-            required={true}
-            fullWidth
-            id="base"
-            label="Zip Code"
-            variant="outlined"
-            onChange={onChangeZip}
-          />
-          {/* Country */}
-          <TextField
-            required={true}
-            fullWidth
-            id="mobile"
-            // label="Phone number"
-            variant="outlined"
-            value={cardInfo?.country?.name}
-            // onChange={onChangeMobile}
-          />
-          {/* <Autocomplete
+              <TextField
+                type="month"
+                required={true}
+                fullWidth
+                id="start"
+                name="start"
+                // min="2022-01"
+                defaultValue="2022-01"
+                onChange={onChangeExpiryDate}
+              />
+            </Stack>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={5}>
+              {/* CVV */}
+              <TextField
+                required={true}
+                fullWidth
+                id="base"
+                label="CVV"
+                variant="outlined"
+                onChange={onChangeCVV}
+              />
+            </Stack>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={5}>
+              {/* street */}
+              <TextField
+                required={true}
+                fullWidth
+                id="street"
+                label="Street"
+                variant="outlined"
+                onChange={onChangeStreet}
+              />
+              {/* Mobile */}
+              <TextField
+                required={true}
+                fullWidth
+                id="mobile"
+                // label="Phone number"
+                variant="outlined"
+                value={cardInfo?.bank?.phone}
+                // onChange={onChangeMobile}
+              />
+            </Stack>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={5}>
+              {/* Zip code */}
+              <TextField
+                required={true}
+                fullWidth
+                id="base"
+                label="Zip Code"
+                variant="outlined"
+                onChange={onChangeZip}
+              />
+              {/* Country */}
+              <TextField
+                required={true}
+                fullWidth
+                id="mobile"
+                // label="Phone number"
+                variant="outlined"
+                value={cardInfo?.country?.name}
+                // onChange={onChangeMobile}
+              />
+              {/* <Autocomplete
             fullWidth
             id="country-select-demo"
             // sx={{ width: 400 }}
@@ -281,122 +281,125 @@ const AddProductModel = (props: any) => {
               />
             )}
           /> */}
-        </Stack>
-        <Stack direction={{ xs: "column", sm: "row" }} spacing={5}>
-          {/* States */}
-          <Autocomplete
-            fullWidth
-            id="country-select-demo"
-            options={USAstates}
-            onChange={onChangeState}
-            autoHighlight
-            getOptionLabel={(option) => option.label}
-            renderOption={(props, option) => (
-              <Box
-                component="li"
-                sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
-                {...props}
-              >
-                {option.label}
-              </Box>
-            )}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="States"
-                inputProps={{
-                  ...params.inputProps,
-                  autoComplete: "new-password", // disable autocomplete and autofill
-                }}
+            </Stack>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={5}>
+              {/* States */}
+              <Autocomplete
+                fullWidth
+                id="country-select-demo"
+                options={USAstates}
+                onChange={onChangeState}
+                autoHighlight
+                getOptionLabel={(option) => option.label}
+                renderOption={(props, option) => (
+                  <Box
+                    component="li"
+                    sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+                    {...props}
+                  >
+                    {option.label}
+                  </Box>
+                )}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="States"
+                    inputProps={{
+                      ...params.inputProps,
+                      autoComplete: "new-password", // disable autocomplete and autofill
+                    }}
+                  />
+                )}
               />
-            )}
-          />
-          {/* City */}
-          <TextField
-            required={true}
-            fullWidth
-            id="zip"
-            label="City"
-            variant="outlined"
-            onChange={onChangeCity}
-          />
-        </Stack>
-        <Stack direction={{ xs: "column", sm: "row" }} spacing={5}>
-          {/* Type */}
-          <TextField
-            required={true}
-            fullWidth
-            id="od"
-            // label="Type"
-            variant="outlined"
-            value={cardInfo?.type}
-          />
-          {/* Label */}
-          <TextField
-            required={true}
-            fullWidth
-            id="od"
-            // label="Lavel"
-            variant="outlined"
-            value={cardInfo?.scheme}
-          />
-        </Stack>
-        <Stack direction={{ xs: "column", sm: "row" }} spacing={5}>
-          {/* ODetails */}
-          <TextField
-            required={true}
-            fullWidth
-            id="od"
-            label="Other Details.."
-            variant="outlined"
-            onChange={onChangeOtherDetails}
-          />
-          <TextField
-            required={true}
-            fullWidth
-            id="od"
-            label="Price"
-            variant="outlined"
-            onChange={onChangePrice}
-          />
-        </Stack>
-        <Stack direction={{ xs: "column", sm: "row" }} spacing={5}>
-          {/* DL */}
-          <TextField
-            // required={true}
-            fullWidth
-            id="zip"
-            label="Driving Licence Number"
-            variant="outlined"
-            onChange={onChangeDl}
-          />
-          {/* SSN */}
-          <TextField
-            // required={true}
-            fullWidth
-            id="ssn"
-            label="Social Security Number"
-            variant="outlined"
-            onChange={onChangeSsn}
-          />
-        </Stack>
-        <Stack direction={{ xs: "column", sm: "row" }} spacing={5}>
-          <TextField
-            required={true}
-            fullWidth
-            id="od"
-            // label="Bank"
-            variant="outlined"
-            value={cardInfo?.bank?.name}
-          />
-        </Stack>
-      </Stack>
+              {/* City */}
+              <TextField
+                required={true}
+                fullWidth
+                id="zip"
+                label="City"
+                variant="outlined"
+                onChange={onChangeCity}
+              />
+            </Stack>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={5}>
+              {/* Type */}
+              <TextField
+                required={true}
+                fullWidth
+                id="od"
+                // label="Type"
+                variant="outlined"
+                value={cardInfo?.type}
+              />
+              {/* Label */}
+              <TextField
+                required={true}
+                fullWidth
+                id="od"
+                // label="Lavel"
+                variant="outlined"
+                value={cardInfo?.scheme}
+              />
+            </Stack>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={5}>
+              {/* ODetails */}
+              <TextField
+                required={true}
+                fullWidth
+                id="od"
+                label="Other Details.."
+                variant="outlined"
+                onChange={onChangeOtherDetails}
+              />
+              <TextField
+                required={true}
+                fullWidth
+                id="od"
+                label="Price"
+                variant="outlined"
+                onChange={onChangePrice}
+              />
+            </Stack>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={5}>
+              {/* DL */}
+              <TextField
+                // required={true}
+                fullWidth
+                id="zip"
+                label="Driving Licence Number"
+                variant="outlined"
+                onChange={onChangeDl}
+              />
+              {/* SSN */}
+              <TextField
+                // required={true}
+                fullWidth
+                id="ssn"
+                label="Social Security Number"
+                variant="outlined"
+                onChange={onChangeSsn}
+              />
+            </Stack>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={5}>
+              <TextField
+                required={true}
+                fullWidth
+                id="od"
+                // label="Bank"
+                variant="outlined"
+                value={cardInfo?.bank?.name}
+              />
+            </Stack>
+          </Stack>
         </DialogContent>
         <DialogActions>
           <Box
             sx={{ mt: 3, display: "flex", justifyContent: "flex-end", p: 3 }}
           >
-            <Button variant="contained" onClick={OnSubmit}> Submit</Button>
+            <Button variant="contained" onClick={OnSubmit}>
+              {" "}
+              Submit
+            </Button>
           </Box>
         </DialogActions>
       </Dialog>

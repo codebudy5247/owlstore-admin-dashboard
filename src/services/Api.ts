@@ -50,7 +50,7 @@ export interface AddCardRequestPayload {
   extraField?: Array<any>[];
 }
 
-//signin
+//SignIn
 export async function signIn(email: string, password: string) {
   try {
     const axiosConfig: axios.AxiosRequestConfig = {

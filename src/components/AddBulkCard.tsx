@@ -114,6 +114,12 @@ const AddBulkCard = (props:any) => {
         if (error) {
             alert(error?.data)
         }
+
+        if(response){
+          // alert("Added!")
+          props?.handleClose()
+          props?.getProducts()
+        }
        
       } else {
         alert("Something went wrong!")

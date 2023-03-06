@@ -38,14 +38,18 @@ const Products = () => {
   const handleOpen1 = () => setOpen1(true);
   const handleClose1 = () => setOpen1(false);
 
+  const getProducts = async () => {
+    setLoading(true);
+    const [err, res] = await Api.getCards();
+    if (res) {
+      setProducts(res?.data);
+    }
+    setLoading(false);
+  };
+
   useEffect(() => {
     const init = async () => {
-      setLoading(true);
-      const [err, res] = await Api.getCards();
-      if (res) {
-        setProducts(res?.data);
-      }
-      setLoading(false);
+      getProducts();
     };
     init();
   }, []);
@@ -53,10 +57,10 @@ const Products = () => {
   const deleteProduct = async (item: any) => {
     const [error, response] = await Api.deleteCard(item._id);
     if (error) {
-      alert(error?.data)
+      alert(error?.data);
     }
     if (response) {
-      alert("Deleted")
+      alert("Deleted");
     }
   };
 
@@ -84,7 +88,14 @@ const Products = () => {
               mb: 4,
             }}
           >
-            <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 3,gap:2 }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                mb: 3,
+                gap: 2,
+              }}
+            >
               <Button
                 variant="contained"
                 startIcon={<AddIcon />}
@@ -161,7 +172,10 @@ const Products = () => {
                             {row?.createdBy?.slice(0, 6)}...
                           </TableCell>
                           <TableCell sx={{ cursor: "pointer" }}>
-                            <Button variant="contained" onClick={() => deleteProduct(row)}>
+                            <Button
+                              variant="contained"
+                              onClick={() => deleteProduct(row)}
+                            >
                               <DeleteIcon />
                             </Button>
                           </TableCell>
@@ -172,8 +186,16 @@ const Products = () => {
               </TableContainer>
             )}
           </Container>
-          <AddProductModel open={open} handleClose={handleClose} />
-          <AddBulkCard open={open1} handleClose={handleClose1} />
+          <AddProductModel
+            open={open}
+            handleClose={handleClose}
+            getProducts={getProducts}
+          />
+          <AddBulkCard
+            open={open1}
+            handleClose={handleClose1}
+            getProducts={getProducts}
+          />
         </Box>
       </Box>
     </ThemeProvider>
