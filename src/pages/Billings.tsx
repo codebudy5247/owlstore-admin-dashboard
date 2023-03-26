@@ -110,6 +110,7 @@ const Billings = () => {
                       <TableCell>Transaction Id</TableCell>
                       <TableCell>Cutomer</TableCell>
                       <TableCell>Amount</TableCell>
+                      <TableCell>Amount (Deposit to user wallet)</TableCell>
                       <TableCell>Paid by Admin</TableCell>
                     </TableRow>
                   </TableHead>
@@ -145,6 +146,9 @@ const Billings = () => {
                           <TableCell>
                             {row?.payWith} {row?.amount}
                           </TableCell>
+                          <TableCell>
+                            ${row?.amountDepositTowallet}
+                          </TableCell>
                           <TableCell>{row?.paidByAdmin.toString()}</TableCell>
                           {row?.paidByAdmin.toString() === "true" ? (
                             <></>
@@ -155,7 +159,7 @@ const Billings = () => {
                                 onClick={() =>
                                   depositMoney(
                                     row?.createdBy,
-                                    row?.amount,
+                                    row?.amountDepositTowallet,
                                     row?._id
                                   )
                                 }
